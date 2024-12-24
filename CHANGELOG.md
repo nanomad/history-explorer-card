@@ -2,6 +2,9 @@
 
 Changelog for the HA History Explorer Card.
 (Using format and definitions from https://keepachangelog.com/en/1.0.0/)
+## [v1.1.0] - 2024-12-24
+### Changed
+- Fixed CSV export by migrating to proper npm/webpack pipeline
 
 ## [v1.0.54] - 2024-05-10
 ### Changed

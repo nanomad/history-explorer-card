@@ -1,9 +1,7 @@
-
-import "../deps/moment.js";
-import "../deps/Chart.js";
-import "../deps/timeline.js";
-import "../deps/md5.js"
-import "../deps/FileSaver.js"
+import moment from 'moment';
+import { Chart } from 'chart.js';
+import { md5 } from 'js-md5';
+import 'chartjs-chart-timeline'
 
 import { vertline_plugin } from "./history-chart-vline.js";
 import { HistoryCSVExporter, StatisticsCSVExporter } from "./history-csv-exporter.js";
@@ -11,10 +9,7 @@ import { stateColors, stateColorsDark, defaultColors, parseColor, parseColorRang
 import { setLanguage, i18n } from "./languages.js";
 import "./history-info-panel.js"
 
-var Chart = window.HXLocal_Chart;
-var moment = window.HXLocal_moment;
-
-const Version = '1.0.54';
+const Version = '1.1.0';
 
 export const isMobile = ( navigator.appVersion.indexOf("Mobi") > -1 ) || ( navigator.userAgent.indexOf("HomeAssistant") > -1 );
 
@@ -262,7 +257,7 @@ export class HistoryCardState {
         // general fallback if state color is not defined anywhere, generate color from the MD5 hash of the state name
         if( !c ) {
             if( !this.colorMap.has(value) ) {
-                const md = md5hx(value);
+                const md = md5(value);
                 const h = ((md[0] & 0x7FFFFFFF) * this.pconfig.colorSeed) % 359;
                 const s = Math.ceil(45.0 + (30.0 * (((md[1] & 0x7FFFFFFF) % 255) / 255.0))) - (this.ui.darkMode ? 13 : 0);
                 const l = Math.ceil(55.0 + (10.0 * (((md[1] & 0x7FFFFFFF) % 255) / 255.0))) - (this.ui.darkMode ? 5 : 0);
@@ -2266,9 +2261,10 @@ export class HistoryCardState {
         switch( type ) {
             case 'line': return ( h ? h : this.pconfig.lineGraphHeight );
             case 'bar':  return ( h ? h : this.pconfig.barGraphHeight ) + 24;
-            default:
-                const m = ( this.pconfig.tooltipSize == 'full' ) ? 130 : ( this.pconfig.tooltipSize == 'slim' ) ? 90 : 115;
-                return Math.max(34 + n * this.pconfig.timelineBarSpacing, m);
+            default: {
+                    const m = ( this.pconfig.tooltipSize == 'full' ) ? 130 : ( this.pconfig.tooltipSize == 'slim' ) ? 90 : 115;
+                    return Math.max(34 + n * this.pconfig.timelineBarSpacing, m);
+                }
         }
     }
 
